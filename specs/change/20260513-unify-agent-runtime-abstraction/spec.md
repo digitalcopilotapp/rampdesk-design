@@ -14,9 +14,10 @@ created: "2026-05-13"
 
 ### Goals
 
-- 重构代码，统一 agent runtime 抽象。
+- 重构代码，统一 agent runtime 抽象 `RuntimeAdapter`。
 - 将不同 agent runtime 的差异性封装到底层模块中。
 - 让上层逻辑无需感知具体 runtime 的协议、parser、handler、事件格式或输出形态。
+- 现有的文件结构、AgentRuntimeDef 等尽量不改动，避免大范围的文件搬迁或变量重命名，防止引发大量合并冲突。
 
 ### Success Criteria
 
