@@ -138,6 +138,7 @@ export const en: Dict = {
   'settings.themeSystem': 'System',
   'settings.themeLight': 'Light',
   'settings.themeDark': 'Dark',
+  'settings.agentModelHead': 'Model for:',
   'settings.modelPicker': 'Model',
   'settings.reasoningPicker': 'Reasoning effort',
   'settings.modelPickerHint':
@@ -1480,6 +1481,7 @@ export const en: Dict = {
   'settings.memoryFlashSaved': '✓ Memory saved',
   'settings.memoryFlashDeleted': '✓ Memory deleted',
   'settings.memoryFlashIndexSaved': '✓ Index saved',
+  'settings.memoryFlashPathCopied': '✓ Path copied',
   'settings.memoryNameLabel': 'Title',
   'settings.memoryTypeLabel': 'Type',
   'settings.memoryDescLabel': 'Description',

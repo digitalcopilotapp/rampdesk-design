@@ -2147,18 +2147,8 @@ export function SettingsDialog({
                   : modelValue;
                 return (
                   <div className="agent-model-row">
-                    {/*
-                      Attribution header — when the user has scrolled past
-                      the agent grid, the Claude Code / Codex card is no
-                      longer in view, so the model picker becomes
-                      ambiguous ("which CLI's model am I editing?").
-                      An explicit "Model for <agent>" line resolves that
-                      without forcing the user to scroll back up. Inline
-                      English; other locales pick this up at PR-time
-                      translation sweep.
-                    */}
                     <div className="agent-model-row-head">
-                      Model for: <strong>{selected.name}</strong>
+                      {t('settings.agentModelHead')} <strong>{selected.name}</strong>
                     </div>
                     {hasModels ? (
                       <>

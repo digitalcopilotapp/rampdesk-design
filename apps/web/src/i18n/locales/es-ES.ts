@@ -49,7 +49,7 @@ export const esES: Dict = {
   'settings.welcomeSubtitle':
     'Elige cómo quieres ejecutar las generaciones. Puedes cambiarlo en cualquier momento desde el botón Ajustes en la barra superior.',
   'settings.kicker': 'Ajustes',
-  'settings.title': 'Ejecución y modelo',
+  'settings.title': 'Modo de ejecución',
   'settings.subtitle': 'Elige entre CLI local y BYOK. Tu clave de API se guarda solo en este navegador.',
   'settings.modeAria': 'Modo de ejecución',
   'settings.protocolAria': 'Protocolo de API',
@@ -121,7 +121,7 @@ export const esES: Dict = {
   'settings.apiHint': 'Las llamadas pasan por el proxy del daemon local hasta la URL base configurada. La clave se guarda solo en este navegador y se envía con las solicitudes al proveedor.',
   'settings.skipForNow': 'Omitir por ahora',
   'settings.getStarted': 'Empezar',
-  'settings.envConfigure': 'Configurar el modo de ejecución',
+  'settings.envConfigure': 'Modo de ejecución',
   'settings.localCli': 'CLI local',
   'settings.anthropicApi': 'API de Anthropic',
   'settings.noAgentSelected': 'ningún agente seleccionado',
@@ -132,6 +132,7 @@ export const esES: Dict = {
   'settings.themeSystem': 'Sistema',
   'settings.themeLight': 'Claro',
   'settings.themeDark': 'Oscuro',
+  'settings.agentModelHead': 'Modelo para:',
   'settings.modelPicker': 'Modelo',
   'settings.reasoningPicker': 'Esfuerzo de razonamiento',
   'settings.modelPickerHint':
@@ -1155,6 +1156,7 @@ export const esES: Dict = {
   'settings.memoryFlashSaved': '✓ Memory saved',
   'settings.memoryFlashDeleted': '✓ Memory deleted',
   'settings.memoryFlashIndexSaved': '✓ Index saved',
+  'settings.memoryFlashPathCopied': '✓ Ruta copiada',
   'settings.memoryNameLabel': 'Title',
   'settings.memoryTypeLabel': 'Type',
   'settings.memoryDescLabel': 'Description',

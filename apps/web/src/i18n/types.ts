@@ -161,6 +161,7 @@ export interface Dict {
   'settings.themeSystem': string;
   'settings.themeLight': string;
   'settings.themeDark': string;
+  'settings.agentModelHead': string;
   'settings.modelPicker': string;
   'settings.reasoningPicker': string;
   'settings.modelPickerHint': string;
@@ -393,6 +394,7 @@ export interface Dict {
   'settings.memoryFlashSaved': string;
   'settings.memoryFlashDeleted': string;
   'settings.memoryFlashIndexSaved': string;
+  'settings.memoryFlashPathCopied': string;
   'settings.memoryNameLabel': string;
   'settings.memoryTypeLabel': string;
   'settings.memoryDescLabel': string;

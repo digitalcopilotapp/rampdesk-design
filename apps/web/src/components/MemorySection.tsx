@@ -305,9 +305,7 @@ export function MemorySection() {
       saved: t('settings.memoryFlashSaved'),
       deleted: t('settings.memoryFlashDeleted'),
       indexSaved: t('settings.memoryFlashIndexSaved'),
-      // Inline English; PR-time translation sweep can hoist this into
-      // the dictionary alongside the other flash labels.
-      pathCopied: 'Path copied',
+      pathCopied: t('settings.memoryFlashPathCopied'),
     }),
     [t],
   );

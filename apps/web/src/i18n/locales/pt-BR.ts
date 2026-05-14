@@ -49,7 +49,7 @@ export const ptBR: Dict = {
   'settings.welcomeSubtitle':
     'Escolha como você quer executar as gerações. Você pode mudar isso a qualquer momento no botão Configurações da barra superior.',
   'settings.kicker': 'Configurações',
-  'settings.title': 'Execução e modelo',
+  'settings.title': 'Modo de execução',
   'settings.subtitle': 'Escolha entre CLI local e BYOK. Sua chave de API fica armazenada apenas neste navegador.',
   'settings.modeAria': 'Modo de execução',
   'settings.protocolAria': 'Protocolo de API',
@@ -121,7 +121,7 @@ export const ptBR: Dict = {
   'settings.apiHint': 'As chamadas passam pelo proxy do daemon local até a Base URL definida. A chave fica armazenada apenas neste navegador e é enviada com as requisições ao provedor.',
   'settings.skipForNow': 'Pular por enquanto',
   'settings.getStarted': 'Começar',
-  'settings.envConfigure': 'Configurar modo de execução',
+  'settings.envConfigure': 'Modo de execução',
   'settings.localCli': 'CLI local',
   'settings.anthropicApi': 'API da Anthropic',
   'settings.noAgentSelected': 'nenhum agente selecionado',
@@ -132,6 +132,7 @@ export const ptBR: Dict = {
   'settings.themeSystem': 'Sistema',
   'settings.themeLight': 'Claro',
   'settings.themeDark': 'Escuro',
+  'settings.agentModelHead': 'Modelo para:',
   'settings.modelPicker': 'Modelo',
   'settings.reasoningPicker': 'Esforço de raciocínio',
   'settings.modelPickerHint':
@@ -1307,6 +1308,7 @@ export const ptBR: Dict = {
   'settings.memoryFlashSaved': '✓ Memory saved',
   'settings.memoryFlashDeleted': '✓ Memory deleted',
   'settings.memoryFlashIndexSaved': '✓ Index saved',
+  'settings.memoryFlashPathCopied': '✓ Caminho copiado',
   'settings.memoryNameLabel': 'Title',
   'settings.memoryTypeLabel': 'Type',
   'settings.memoryDescLabel': 'Description',
