@@ -1,4 +1,14 @@
 # RampDesk Design
+> ## RampDesk Integration
+> 
+> This fork is part of the **RampDesk** ecosystem (`app.rampdesk.com`). Pruned variant of upstream `nexu-io/open-design`:
+> 
+> **Kept**: `apps/daemon` (LLM orchestrator + sandboxed preview), `apps/web` (UI), all 31 skills, design-systems registry, BYOK proxy (OpenAI/OpenRouter/Anthropic/Google), v0-pipeline bridge.
+> 
+> **Removed**: `apps/landing-page`, `apps/desktop` (Electron), `apps/packaged` (installers), `apps/telemetry-worker` — none of these apply to a single-tenant self-hosted RampDesk deployment.
+> 
+> **Primary agent**: **Hermes** (via ACP). Falls back to BYOK proxy when CLI is absent (current Docker mode). Reads design tokens automatically from `~/.hermes/design/<project-slug>/tokens.json`.
+
 
 *Fork of [nexu-io/open-design](https://github.com/nexu-io/open-design) — branded for the RampDesk ecosystem (app.rampdesk.com). Apache-2.0 preserved.*
 
