@@ -1,4 +1,7 @@
-# Open Design
+# RampDesk Design
+
+*Fork of [nexu-io/open-design](https://github.com/nexu-io/open-design) — branded for the RampDesk ecosystem (app.rampdesk.com). Apache-2.0 preserved.*
+
 
 > [!IMPORTANT]
 > ### 🔥 `0.8.0-preview` is here. Design's old world ends here.
