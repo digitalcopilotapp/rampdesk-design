@@ -1,0 +1,153 @@
+#!/usr/bin/env node
+/**
+ * Hermes ACP shim — proxy Open Design ACP JSON-RPC to host's claude-shim.
+ *
+ * Open Design's daemon spawns this with:
+ *   hermes --version           -> "Hermes <ver> (ACP shim)"
+ *   hermes acp --accept-hooks  -> JSON-RPC stdio loop
+ *
+ * Every prompt is forwarded to the host's claude-shim
+ * (default http://host.docker.internal:8088/v1/chat/completions), which runs
+ * the local claude CLI with Max OAuth — zero per-call cost.
+ */
+import { createInterface } from 'node:readline';
+
+const VERSION = '0.1.0';
+const SHIM_TARGET =
+  process.env.HERMES_SHIM_TARGET ?? 'http://host.docker.internal:8088/v1/chat/completions';
+const SHIM_MODEL = process.env.HERMES_SHIM_MODEL ?? 'sonnet';
+
+function send(msg) {
+  process.stdout.write(JSON.stringify(msg) + '\n');
+}
+
+function extractPrompt(blocks) {
+  if (!Array.isArray(blocks)) return '';
+  return blocks
+    .filter((b) => b && typeof b === 'object' && b.type === 'text' && typeof b.text === 'string')
+    .map((b) => b.text)
+    .join('\n');
+}
+
+async function postChat(promptText) {
+  const body = JSON.stringify({
+    messages: [{ role: 'user', content: promptText }],
+    model: SHIM_MODEL,
+    stream: false,
+  });
+  const ac = new AbortController();
+  const timer = setTimeout(() => ac.abort(), 10 * 60 * 1000);
+  try {
+    const r = await fetch(SHIM_TARGET, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body,
+      signal: ac.signal,
+    });
+    if (!r.ok) throw new Error(`shim http ${r.status}`);
+    const data = await r.json();
+    return data?.choices?.[0]?.message?.content ?? JSON.stringify(data).slice(0, 400);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function acpLoop() {
+  const rl = createInterface({ input: process.stdin });
+  for await (const line of rl) {
+    let msg;
+    try {
+      msg = JSON.parse(line);
+    } catch {
+      continue;
+    }
+    if (!msg || typeof msg !== 'object') continue;
+    const { id, method } = msg;
+    const params = msg.params ?? {};
+
+    if (method === 'initialize') {
+      send({
+        jsonrpc: '2.0',
+        id,
+        result: {
+          protocolVersion: 1,
+          agentCapabilities: {
+            loadSession: false,
+            promptCapabilities: { image: false, audio: false, embeddedContext: true },
+          },
+          authMethods: [],
+          models: [
+            { id: 'default', label: 'Default (Sonnet via claude-shim)' },
+            { id: 'sonnet', label: 'Claude Sonnet (Max OAuth)' },
+            { id: 'opus', label: 'Claude Opus (Max OAuth)' },
+            { id: 'haiku', label: 'Claude Haiku (Max OAuth)' },
+          ],
+        },
+      });
+    } else if (method === 'newSession') {
+      send({
+        jsonrpc: '2.0',
+        id,
+        result: { sessionId: `hermes-${Date.now()}` },
+      });
+    } else if (method === 'prompt') {
+      const sid = params.sessionId;
+      const text = extractPrompt(params.prompt);
+      if (!text) {
+        send({ jsonrpc: '2.0', id, result: { stopReason: 'end_turn' } });
+        continue;
+      }
+      try {
+        const reply = await postChat(text);
+        send({
+          jsonrpc: '2.0',
+          method: 'session/update',
+          params: {
+            sessionId: sid,
+            update: {
+              sessionUpdate: 'agent_message_chunk',
+              content: { type: 'text', text: reply },
+            },
+          },
+        });
+        send({ jsonrpc: '2.0', id, result: { stopReason: 'end_turn' } });
+      } catch (err) {
+        send({
+          jsonrpc: '2.0',
+          method: 'session/update',
+          params: {
+            sessionId: sid,
+            update: {
+              sessionUpdate: 'agent_message_chunk',
+              content: { type: 'text', text: `[hermes-shim error: ${err?.message ?? err}]` },
+            },
+          },
+        });
+        send({ jsonrpc: '2.0', id, result: { stopReason: 'error' } });
+      }
+    } else if (method === 'cancel') {
+      send({ jsonrpc: '2.0', id, result: {} });
+    } else if (id !== undefined && id !== null) {
+      send({
+        jsonrpc: '2.0',
+        id,
+        error: { code: -32601, message: `Method not found: ${method}` },
+      });
+    }
+  }
+}
+
+const argv = process.argv.slice(2);
+if (argv[0] === '--version') {
+  console.log(`Hermes ${VERSION} (ACP shim)`);
+  process.exit(0);
+}
+if (argv[0] === 'acp') {
+  acpLoop().catch((err) => {
+    process.stderr.write(`hermes ACP shim crashed: ${err?.stack ?? err}\n`);
+    process.exit(1);
+  });
+} else {
+  process.stderr.write('hermes ACP shim: usage: hermes --version | hermes acp --accept-hooks\n');
+  process.exit(1);
+}

@@ -14,6 +14,7 @@ services:
       OD_BIND_HOST: 0.0.0.0
       OD_ALLOWED_ORIGINS: ${OPEN_DESIGN_ALLOWED_ORIGINS:-}
       OD_API_TOKEN: ${OD_API_TOKEN:-}
+      PATH: /opt/hermes-shim:/usr/local/bin:/usr/bin:/bin
       OD_PORT: 7456
       OD_WEB_PORT: ${OPEN_DESIGN_PORT:-7456}
     ports:
@@ -21,6 +22,7 @@ services:
     volumes:
       - open_design_data:/app/.od
       - /home/hermes/.hermes/design:/hermes-design:ro
+      - /home/hermes/hermes-shim:/opt/hermes-shim:ro
     read_only: true
     tmpfs:
       - /tmp
