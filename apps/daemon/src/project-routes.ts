@@ -1,3 +1,4 @@
+import { loadHermesDesignTokens } from "./hermes-tokens-bridge.js";
 import type { Express } from 'express';
 import {
   defaultScenarioPluginIdForKind,
@@ -181,6 +182,21 @@ export function registerProjectRoutes(app: Express, ctx: RegisterProjectRoutesDe
           : skipDiscoveryBrief === true
             ? { skipDiscoveryBrief: true }
             : null;
+      // RampDesk integration: auto-load locked design tokens from
+      // /hermes-design/<id>/tokens.json (host bind-mount). Stays null for
+      // placeholder/AWAITING tokens so generation falls back to defaults.
+      const hermesTokens = await loadHermesDesignTokens(id);
+      const tokensSection = hermesTokens
+        ? `## LOCKED DESIGN TOKENS (RampDesk)\nThe project "${id}" has approved design tokens. You MUST respect every color, font, spacing, breakpoint, and anti-pattern below. Never invent values outside this set.\n\n\`\`\`json\n${JSON.stringify(hermesTokens, null, 2)}\n\`\`\`\n`
+        : "";
+      const userInstrSection =
+        typeof customInstructions === "string" && customInstructions.trim().length > 0
+          ? `## User instructions\n${customInstructions}`
+          : "";
+      const customInstructionsWithTokens =
+        tokensSection || userInstrSection
+          ? `${tokensSection}${tokensSection && userInstrSection ? "\n" : ""}${userInstrSection}`.trim() || null
+          : null;
       const now = Date.now();
       const project = insertProject(db, {
         id,
@@ -189,10 +205,7 @@ export function registerProjectRoutes(app: Express, ctx: RegisterProjectRoutesDe
         designSystemId: designSystemId ?? null,
         pendingPrompt: pendingPrompt || null,
         metadata: projectMetadata,
-        customInstructions:
-          typeof customInstructions === 'string'
-            ? customInstructions
-            : null,
+        customInstructions: customInstructionsWithTokens,
         createdAt: now,
         updatedAt: now,
       });
